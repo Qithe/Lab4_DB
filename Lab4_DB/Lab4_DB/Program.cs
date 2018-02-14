@@ -10,7 +10,11 @@ namespace Lab4_DB
     {
         static void Main(string[] args)
         {
-            MainMenuPrinter();
+
+            //öppnar väg till servern här
+            //"startar program"
+
+            MainMenu();
             /*
              
              Hur det ser ut när man startar appen:
@@ -20,6 +24,7 @@ namespace Lab4_DB
             //////////////////////
             1. Add User
             2. See all users
+            3. Exit application
 
             *NOTE* Den skall endast ta emot 1, 2 eller ESC
             och när tex 3 trycks så körs alternativ 3.
@@ -54,7 +59,7 @@ namespace Lab4_DB
 
              */
         }
-        static void MainMenuPrinter()
+        static void MainMenu()
         {
             Console.Clear();
             string MenuHeader =
@@ -76,7 +81,7 @@ namespace Lab4_DB
                 {
                     case ConsoleKey.D1:
                     case ConsoleKey.NumPad1:
-                        Menu1Printer();
+                        AddUserMenuIntro();
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
@@ -94,62 +99,65 @@ namespace Lab4_DB
             
         }
 
-        public static void Menu1Printer()
+
+        static void AddUserMenuIntro()
         {
+            UserContex contex = new UserContex();
             Console.Clear();
-            string MenuHeader = 
+            string Email = "";
+            string PicAddress = "";
+            string MenuHeader =
                 "/////////////////////////\n" +
-                "/// Add user Menu       ///\n" +
-                "/// Choose an action    ///\n" +
-                "/// Press Esc to return ///\n" +
+                "/// Add user Menu     ///\n" +
+                "/// Escape to return  ///\n" +
                 "/////////////////////////"; ;
             string Options =
                 "/// Enter the Email address\n" +
                 "/// Then press Enter\n" +
                 "/// Enter the local address\n" +
                 "/// for profile picture";
+
+            //Printar "menyn"
             Console.WriteLine($"{MenuHeader}\n{Options}");
-            string email = "";
-            string PicAddress = "";
-            for (; ; )
-            {
-                
-                //Get Email
-                switch (Console.ReadKey().Key)
-                {
-                    case ConsoleKey.Enter:
-                        email = Console.ReadLine();
-                        Console.WriteLine();
-                        break;
-                    case ConsoleKey.Escape:
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        break;
+            Console.Write("Email: ");
+            // Registrerar email
+            Email = AddUserMenuEmail();
+            //Rensa och registrera bilden
+            Console.Clear();
+            Console.WriteLine($"{MenuHeader}\n{Options}\nEmail: {Email}");
+            Console.Write("Picture Address: ");
+            PicAddress = AddUserMenuPic();
+            //Skiakca denna data till en funktion som skickar till servern
+            SendUserToServer(contex, Email, PicAddress);
 
-                }
-                if (email != "")break;
-            }
-            for (; ; )
-            {
-                
-                //Get Email
-                switch (Console.ReadKey().Key)
-                {
-                    case ConsoleKey.Enter:
-                        PicAddress = Console.ReadLine();
-                        AddUser(email, PicAddress);
-                        break;
-                    case ConsoleKey.Escape:
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        break;
-
-                }
-                if (email != "") break;
-            }
         }
+        public static string AddUserMenuEmail()
+        {
+            //om vi vill ha något somm kollar att det är en email kan det göras här
+            return(Console.ReadLine());
+        }
+        public static string AddUserMenuPic()
+        {
+            // om vi vill verifiera att det finns en bil i denna sök väg gör se här
+            return (Console.ReadLine());
+        }
+        public static void SendUserToServer(UserContex contex, string email, string PicAddress)
+        {
+            UserClass user = new UserClass(email, PicAddress);
+            contex.UserClasses.Add(user);
+            contex.SaveChanges();
+
+            Console.WriteLine(".");
+            System.Threading.Thread.Sleep(1000);
+            Console.WriteLine(". .");
+            System.Threading.Thread.Sleep(1000);
+            Console.WriteLine(". . .");
+            System.Threading.Thread.Sleep(1000);
+            Console.WriteLine("All done!");
+            Console.Read();
+            MainMenu();
+        }
+        
 
         public void Menu2Printer()
         {
@@ -161,10 +169,9 @@ namespace Lab4_DB
 
         }
 
-        private static void AddUser(string email, string picAddress)
-        {
-            Environment.Exit(0);
-            //Do interwebstuff
-        }
+        
+
+
+       
     }
 }
