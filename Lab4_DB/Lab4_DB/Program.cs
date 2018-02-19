@@ -71,7 +71,8 @@ namespace Lab4_DB
 
             string Options =
                 "///1. Add a new user\n" +
-                "///2. Reveiw the database";
+                "///2. Reveiw the database\n" +
+                "///3. Verify users profile pics";
 
             Console.WriteLine($"{MenuHeader}\n{Options}");
 
@@ -85,7 +86,11 @@ namespace Lab4_DB
                         break;
                     case ConsoleKey.D2:
                     case ConsoleKey.NumPad2:
-                        //Menu2Printer();
+                        ViewAllUsers();
+                        break;
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        ViewUsersToVerify();
                         break;
                     case ConsoleKey.Escape:
                         Environment.Exit(0);
@@ -159,17 +164,17 @@ namespace Lab4_DB
         }
         
 
-        public void Menu2Printer()
+        public static void ViewAllUsers()
         {
-            Console.Clear();
-            //hämta bös från servern
-
-            //printa ut bös från det som hämtas hem
-            //ha en count längst upp som kan visa hur många personer som facktist finns
-
+            //Show all the shit in the database
         }
 
-        
+        public static void ViewUsersToVerify()
+        {
+            //Only show the ones without verified pics
+
+            //Let admin change the verification
+        }
 
 
        
